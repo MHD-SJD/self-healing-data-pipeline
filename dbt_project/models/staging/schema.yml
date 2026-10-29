@@ -1,0 +1,48 @@
+version: 2
+
+sources:
+  - name: raw_data
+    schema: raw_data
+    tables:
+      - name: raw_customers
+      - name: raw_orders
+      - name: raw_inventory
+
+models:
+  - name: stg_customers
+    description: "Standardized and cleaned customer records from raw_data"
+    columns:
+      - name: customer_id
+        description: "Primary key identifier for a customer"
+        tests:
+          - unique
+          - not_null
+      - name: email
+        tests:
+          - not_null
+
+  - name: stg_orders
+    description: "Standardized customer orders with numeric typecasting"
+    columns:
+      - name: order_id
+        description: "Primary key identifier for an order"
+        tests:
+          - unique
+          - not_null
+      - name: amount
+        tests:
+          - not_null
+
+  - name: stg_inventory
+    description: "Standardized product inventory stock and pricing"
+    columns:
+      - name: product_id
+        description: "Primary key for product"
+        tests:
+          - unique
+          - not_null
+      - name: sku
+        tests:
+          - unique
+          - not_null
+

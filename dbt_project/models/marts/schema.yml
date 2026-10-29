@@ -1,0 +1,38 @@
+version: 2
+
+models:
+  - name: dim_customers
+    description: "Dimension table representing verified customers"
+    columns:
+      - name: customer_id
+        tests:
+          - unique
+          - not_null
+
+  - name: dim_products
+    description: "Dimension table representing verified product catalog"
+    columns:
+      - name: product_id
+        tests:
+          - unique
+          - not_null
+
+  - name: fct_orders
+    description: "Fact table recording orders and joined customer metadata"
+    columns:
+      - name: order_id
+        tests:
+          - unique
+          - not_null
+      - name: amount
+        tests:
+          - not_null
+
+  - name: fct_inventory_levels
+    description: "Fact table recording stock valuation and quantity by warehouse"
+    columns:
+      - name: product_id
+        tests:
+          - unique
+          - not_null
+

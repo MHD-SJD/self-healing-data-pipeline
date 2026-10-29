@@ -1,0 +1,30 @@
+groups:
+  - name: self_healing_pipeline_alerts
+    rules:
+      - alert: PipelineExecutionFailure
+        expr: rate(pipeline_runs_total{status="FAILED"}[5m]) > 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Pipeline execution failure detected in {{ $labels.pipeline_id }}"
+          description: "Pipeline {{ $labels.pipeline_id }} is experiencing terminal failures."
+
+      - alert: HighQualityRuleViolations
+        expr: rate(quality_checks_failed_total[5m]) > 5
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High volume of data quality rule violations"
+          description: "Dataset {{ $labels.dataset_name }} violated rule {{ $labels.rule_id }} repeatedly."
+
+      - alert: PersistentUnresolvedIncidents
+        expr: active_open_incidents > 3
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Unresolved failure incidents awaiting manual authorization"
+          description: "{{ $value }} incidents in {{ $labels.dataset_name }} require on-call engineer intervention."
+
